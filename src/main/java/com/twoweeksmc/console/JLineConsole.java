@@ -1,23 +1,8 @@
 package com.twoweeksmc.console;
 
-/*
- * Copyright (c) 2024-2025 2WeeksMc team & contributors
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+import com.github.lalyos.jfiglet.FigletFont;
 import com.twoweeksmc.console.mode.DefaultMode;
 import com.twoweeksmc.console.mode.Mode;
-import com.twoweeksmc.util.FileUtils;
 import com.twoweeksmc.web.WebServer;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +16,7 @@ import org.jline.terminal.TerminalBuilder;
 import org.jline.utils.AttributedString;
 import org.jline.utils.InfoCmp;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
@@ -163,9 +149,8 @@ public class JLineConsole {
 
     public void sendWelcomeMessage() {
         sendFiglet();
-        System.out.print("\n");
         System.out.println(ConsoleColor.apply("       [00FFFF-00BFFF]2weeksmc &7- &b1.0.0&7@&bdevelopment"));
-        System.out.println(ConsoleColor.apply("       &fby &bezTxmMC&7, &bDragonRex &fand contributors."));
+        System.out.println(ConsoleColor.apply("       &fby &bezTxmMC&7 & &bDragonRex"));
         System.out.print("\n");
         System.out.println(ConsoleColor.apply("       &fType &bhelp &fto list all commands."));
         System.out.print("\n");
@@ -173,7 +158,11 @@ public class JLineConsole {
     }
 
     public void sendFiglet() {
-        System.out.println(FileUtils.fileContent("header.txt"));
+        try {
+            System.out.println(FigletFont.convertOneLine("2weeksmc - Core"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void clear() {

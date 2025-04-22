@@ -1,6 +1,7 @@
 package com.twoweeksmc.web;
 
 import com.sun.net.httpserver.HttpServer;
+import com.twoweeksmc.util.Method;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 public class WebServer {
     private final int port;
     private final HttpServer httpServer;
-    private List<Request> requests;
+    private final List<Request> requests;
 
     public WebServer(int port) {
         try {
@@ -35,30 +36,14 @@ public class WebServer {
         }
     }
 
-    public void get(String path, Consumer<HttpContext> ctx) {
-        this.requests.add(new Request(path, "GET", ctx));
-    }
-
-    public void post(String path, Consumer<HttpContext> ctx) {
-        this.requests.add(new Request(path, "POST", ctx));
-    }
-
-    public void put(String path, Consumer<HttpContext> ctx) {
-        this.requests.add(new Request(path, "PUT", ctx));
-    }
-
-    public void delete(String path, Consumer<HttpContext> ctx) {
-        this.requests.add(new Request(path, "DELETE", ctx));
-    }
-
-    public void update(String path, Consumer<HttpContext> ctx) {
-        this.requests.add(new Request(path, "UPDATE", ctx));
+    public void handle(Method method, String path, Consumer<HttpContext> context) {
+        this.requests.add(new Request(path, method.name().toUpperCase(), context));
     }
 
     private void handleServer() {
         this.requests.forEach(request -> this.httpServer.createContext(request.path(), handle ->  {
-            if(handle.getRequestMethod().equals(request.requestType().toUpperCase())) {
-                request.ctx().accept(new HttpContext(handle));
+            if (handle.getRequestMethod().equals(request.requestType().toUpperCase())) {
+                request.context().accept(new HttpContext(handle));
             }
         }));
     }

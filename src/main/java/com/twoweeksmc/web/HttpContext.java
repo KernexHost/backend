@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpContext {
-    private HttpExchange exchange;
+    private final HttpExchange exchange;
 
     public HttpContext(HttpExchange exchange) {
         this.exchange = exchange;
@@ -24,7 +24,7 @@ public class HttpContext {
                 os.write(json.getBytes());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -35,7 +35,7 @@ public class HttpContext {
                 body = new String(in.readAllBytes());
             }
         } catch(IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return body;
     }
@@ -59,7 +59,7 @@ public class HttpContext {
                 fis.transferTo(os);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -71,7 +71,7 @@ public class HttpContext {
                 os.write(html.getBytes());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -84,7 +84,7 @@ public class HttpContext {
                 os.write(html.getBytes());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -96,7 +96,7 @@ public class HttpContext {
                 os.write(xml.getBytes());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
