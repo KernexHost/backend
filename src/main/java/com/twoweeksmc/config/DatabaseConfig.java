@@ -1,17 +1,24 @@
 package com.twoweeksmc.config;
 
 import de.eztxm.ezlib.config.annotation.JsonConfig;
+import de.eztxm.ezlib.config.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-@JsonConfig(fileName = "database.json")
+@JsonConfig(path = ".", fileName = "database.json")
 public class DatabaseConfig {
-    private final String protocol;
-    private final String host;
-    private final int port;
-    private final String database;
-    private final String user;
-    private final String password;
+    @JsonValue(name = "protocol")
+    private String protocol;
+    @JsonValue(name = "host")
+    private String host;
+    @JsonValue(name = "port")
+    private int port;
+    @JsonValue(name = "database")
+    private String database;
+    @JsonValue(name = "user")
+    private String user;
+    @JsonValue(name = "password")
+    private String password;
 
     public DatabaseConfig() {
         this.protocol = "mongodb";

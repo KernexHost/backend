@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.twoweeksmc.config.DatabaseConfig;
 import com.twoweeksmc.connector.model.ServerModel;
 import com.twoweeksmc.connector.model.UserModel;
 import de.eztxm.ezlib.config.JsonConfig;
@@ -19,16 +20,16 @@ public class MongoConnector {
     private final UserModel userModel;
     private final ServerModel serverModel;
 
-    public MongoConnector(JsonConfig databaseConfiguration) {
+    public MongoConnector(DatabaseConfig databaseConfiguration) {
         this.mongoClient = MongoClients.create(
-                databaseConfiguration.get("protocol").asString()
-                        + "://" + databaseConfiguration.get("username").asString()
-                        + ":" + databaseConfiguration.get("password").asString()
-                + "@" + databaseConfiguration.get("host").asString()
-                + ":" + databaseConfiguration.get("port").asString()
-                + "/?authSource=" + databaseConfiguration.get("database").asString()
+                databaseConfiguration.getProtocol()
+                        + "://" + databaseConfiguration.getUser()
+                        + ":" + databaseConfiguration.getPassword()
+                + "@" + databaseConfiguration.getHost()
+                + ":" + databaseConfiguration.getPort()
+                + "/?authSource=" + databaseConfiguration.getDatabase()
         );
-        this.mongoDatabase = this.mongoClient.getDatabase(databaseConfiguration.get("database").asString());
+        this.mongoDatabase = this.mongoClient.getDatabase(databaseConfiguration.getDatabase());
         this.serverCollection = this.getOrCreateCollection("servers");
         this.userCollection = this.getOrCreateCollection("users");
         this.userModel = new UserModel(this);
