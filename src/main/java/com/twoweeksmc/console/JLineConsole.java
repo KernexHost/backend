@@ -4,6 +4,7 @@ import com.github.lalyos.jfiglet.FigletFont;
 import com.twoweeksmc.console.mode.DefaultMode;
 import com.twoweeksmc.console.mode.Mode;
 import com.twoweeksmc.web.WebServer;
+import io.javalin.Javalin;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -30,7 +31,7 @@ import java.util.List;
 public class JLineConsole {
     private final Terminal terminal;
     private final LineReaderImpl reader;
-    private WebServer webServer;
+    private Javalin webServer;
 
     private boolean isRunning;
     private boolean isPaused;
@@ -40,7 +41,7 @@ public class JLineConsole {
     private final HashMap<Mode, List<String>> logs;
 
     @SneakyThrows
-    public JLineConsole(WebServer webServer) {
+    public JLineConsole(Javalin webServer) {
         this.webServer = webServer;
         this.terminal = TerminalBuilder.builder()
                 .system(true)
