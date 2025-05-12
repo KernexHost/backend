@@ -5,7 +5,6 @@ import com.twoweeksmc.console.JLineConsole;
 import com.twoweeksmc.request.AccountRequest;
 import com.twoweeksmc.request.GroupRequest;
 import com.twoweeksmc.request.ServerRequest;
-import com.twoweeksmc.web.WebServer;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import io.javalin.Javalin;
 import lombok.Getter;
@@ -19,6 +18,7 @@ public class BackendCore {
 
     public BackendCore() {
         this.databaseConfigProcessor = JsonProcessor.loadConfiguration(DatabaseConfig.class);
+        this.databaseConfigProcessor.saveConfiguration();
         this.databaseConfig = this.databaseConfigProcessor.getInstance();
         this.webServer = Javalin.create(config -> {
             config.showJavalinBanner = false;

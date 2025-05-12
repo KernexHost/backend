@@ -3,9 +3,11 @@ package com.twoweeksmc.config;
 import de.eztxm.ezlib.config.annotation.JsonConfig;
 import de.eztxm.ezlib.config.annotation.JsonValue;
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
-@JsonConfig(path = ".", fileName = "database.json")
+@JsonConfig(fileName = "database.json")
 public class DatabaseConfig {
     @JsonValue(name = "protocol")
     private String protocol;
