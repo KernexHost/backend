@@ -1,10 +1,12 @@
 package com.twoweeksmc;
 
 import com.twoweeksmc.config.DatabaseConfig;
+import com.twoweeksmc.connector.MongoConnector;
 import com.twoweeksmc.console.JLineConsole;
 import com.twoweeksmc.request.AccountRequest;
 import com.twoweeksmc.request.GroupRequest;
 import com.twoweeksmc.request.ServerRequest;
+import de.eztxm.ezlib.config.object.JsonUtil;
 import de.eztxm.ezlib.config.reflect.JsonProcessor;
 import io.javalin.Javalin;
 import lombok.Getter;
@@ -15,11 +17,18 @@ public class BackendCore {
     private final DatabaseConfig databaseConfig;
     private final Javalin webServer;
     private JLineConsole console;
+    private MongoConnector mongoConnector;
 
     public BackendCore() {
+        JsonUtil.prettyPrint = true;
         this.databaseConfigProcessor = JsonProcessor.loadConfiguration(DatabaseConfig.class);
         this.databaseConfigProcessor.saveConfiguration();
         this.databaseConfig = this.databaseConfigProcessor.getInstance();
+        System.out.println("Database Config Loaded!");
+
+        this.mongoConnector = new MongoConnector(this.databaseConfig);
+        System.out.println("Database Connected!");
+
         this.webServer = Javalin.create(config -> {
             config.showJavalinBanner = false;
         });
