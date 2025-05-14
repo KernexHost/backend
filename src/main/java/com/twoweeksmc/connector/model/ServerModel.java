@@ -22,7 +22,7 @@ public class ServerModel {
         document.put("weeks", serverObject.getConverted("weeks").asInteger());
         document.put("max-players", serverObject.getConverted("max-players").asInteger());
         document.put("max-memory", serverObject.getConverted("max-memory").asInteger());
-        document.put("plugins", serverObject.getConverted("plugins").asJsonArray());
+        document.put("plugins", serverObject.getConverted("plugins").asJsonArray(String.class));
         return this.connector.getServerCollection().insertOne(document).wasAcknowledged();
     }
 

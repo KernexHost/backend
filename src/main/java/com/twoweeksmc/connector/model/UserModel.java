@@ -1,6 +1,8 @@
 package com.twoweeksmc.connector.model;
 
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
+import com.twoweeksmc.BackendCore;
 import com.twoweeksmc.connector.MongoConnector;
 import com.twoweeksmc.connector.util.Encryption;
 import de.eztxm.ezlib.config.object.JsonArray;
@@ -34,7 +36,7 @@ public class UserModel {
         document.put("phone", userData.getConverted("phone").asString());
         document.put("company", userData.getConverted("company").asString());
         document.put("ip", userData.getConverted("ip").asString());
-        document.put("gems", 100);
+        document.put("balance", 2.50);
         return this.connector.getUserCollection().insertOne(document).wasAcknowledged();
     }
 
@@ -66,7 +68,9 @@ public class UserModel {
         if (!userExists(username)) {
             return null;
         }
-        return this.connector.getUserCollection().find(Filters.eq("username", username)).first();
+        return this.connector.getUserCollection()
+                .find(Filters.eq("username", username))
+                .projection(Projections.exclude("_id", "password")).first();
     }
 
     public boolean userExists(String username) {

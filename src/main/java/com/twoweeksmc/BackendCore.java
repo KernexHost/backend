@@ -13,6 +13,7 @@ import lombok.Getter;
 
 @Getter
 public class BackendCore {
+    private static BackendCore BACKEND;
     private final JsonProcessor<DatabaseConfig> databaseConfigProcessor;
     private final DatabaseConfig databaseConfig;
     private final Javalin webServer;
@@ -20,6 +21,7 @@ public class BackendCore {
     private MongoConnector mongoConnector;
 
     public BackendCore() {
+        BACKEND  = this;
         JsonUtil.prettyPrint = true;
         this.databaseConfigProcessor = JsonProcessor.loadConfiguration(DatabaseConfig.class);
         this.databaseConfigProcessor.saveConfiguration();
@@ -33,7 +35,7 @@ public class BackendCore {
             config.showJavalinBanner = false;
         });
         this.registerRequests();
-        this.webServer.start();
+        this.webServer.start(8080);
         this.startConsole();
     }
 
@@ -61,6 +63,10 @@ public class BackendCore {
         this.console = new JLineConsole(this.webServer);
         this.initializeConsole();
         this.console.start();
+    }
+
+    public static BackendCore getBackend() {
+        return BACKEND;
     }
 
     private void initializeConsole() {
