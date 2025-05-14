@@ -16,9 +16,9 @@ public class BackendCore {
     private static BackendCore BACKEND;
     private final JsonProcessor<DatabaseConfig> databaseConfigProcessor;
     private final DatabaseConfig databaseConfig;
+    private final MongoConnector mongoConnector;
     private final Javalin webServer;
     private JLineConsole console;
-    private MongoConnector mongoConnector;
 
     public BackendCore() {
         BACKEND  = this;
@@ -47,7 +47,7 @@ public class BackendCore {
         serverRequest.suspend();
         serverRequest.delete();
         serverRequest.information();
-        AccountRequest accountRequest = new AccountRequest(this.webServer, this.console);
+        AccountRequest accountRequest = new AccountRequest(this.webServer, this.console, this.mongoConnector.getUserModel());
         accountRequest.create();
         accountRequest.edit();
         accountRequest.delete();

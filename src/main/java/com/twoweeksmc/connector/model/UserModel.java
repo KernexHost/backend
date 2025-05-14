@@ -40,13 +40,13 @@ public class UserModel {
         return this.connector.getUserCollection().insertOne(document).wasAcknowledged();
     }
 
-    public boolean updateUser(String username, JsonArray<JsonObject> updates) {
-        if (!userExists(username)) {
+    public boolean updateUser(String uuid, JsonArray<JsonObject> updates) {
+        if (!userExists(uuid)) {
             return false;
         }
         for (JsonObject update : updates) {
             boolean success = this.connector.getUserCollection().updateOne(
-                    Filters.eq("username", username), new Document("$set",
+                    Filters.eq("uuid", uuid), new Document("$set",
                             new Document(update.getConverted("key").asString(), update.getConverted("value").asObject())
                     )
             ).wasAcknowledged();
@@ -57,24 +57,24 @@ public class UserModel {
         return true;
     }
 
-    public boolean deleteUser(String username) {
-        if (!userExists(username)) {
+    public boolean deleteUser(String uuid) {
+        if (!userExists(uuid)) {
             return false;
         }
-        return this.connector.getUserCollection().deleteOne(Filters.eq("username", username)).wasAcknowledged();
+        return this.connector.getUserCollection().deleteOne(Filters.eq("uuid", uuid)).wasAcknowledged();
     }
 
-    public Document getUser(String username) {
-        if (!userExists(username)) {
+    public Document getUser(String uuid) {
+        if (!userExists(uuid)) {
             return null;
         }
         return this.connector.getUserCollection()
-                .find(Filters.eq("username", username))
+                .find(Filters.eq("uuid", uuid))
                 .projection(Projections.exclude("_id", "password")).first();
     }
 
-    public boolean userExists(String username) {
-        return this.connector.getUserCollection().find(Filters.eq("username", username)).iterator().hasNext();
+    public boolean userExists(String uuid) {
+        return this.connector.getUserCollection().find(Filters.eq("uuid", uuid)).iterator().hasNext();
     }
 
     public boolean userExists(String email, String username) {
