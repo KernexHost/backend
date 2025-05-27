@@ -1,8 +1,0 @@
-{
-        "protocol": "mongodb",
-        "host": "localhost",
-        "port": 27017,
-        "database": "TwoWeeksMc",
-        "user": "twoweeksmc",
-        "password": "admin"
-        }

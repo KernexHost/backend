@@ -34,7 +34,31 @@ public class BackendCore {
         this.webServer = Javalin.create(config -> {
             config.showJavalinBanner = false;
         });
+
+        this.console = new JLineConsole(this.webServer);
+
         this.registerRequests();
+
+        this.webServer.exception(Exception.class, (e, ctx) -> {
+            // Dies ist der "print"-Teil, den du suchst!
+            // System.err.println gibt die Ausgabe in den Fehlerstrom aus, oft rot in IDEs.
+            System.err.println("--------------------------------------------------");
+            System.err.println("Ein interner Serverfehler ist aufgetreten!");
+            System.err.println("Fehlertyp: " + e.getClass().getName());
+            System.err.println("Fehlermeldung: " + e.getMessage());
+            System.err.println("--------------------------------------------------");
+
+            // e.printStackTrace() ist extrem wichtig, da es den vollständigen Stack-Trace ausgibt.
+            // Der Stack-Trace zeigt dir genau, in welcher Datei und Zeile der Fehler aufgetreten ist.
+            e.printStackTrace();
+            System.err.println("--------------------------------------------------");
+
+            // Sende eine 500er-Antwort an den Client
+            ctx.status(500).result("Ein unerwarteter Fehler ist aufgetreten. Bitte überprüfen Sie die Server-Logs.");
+            // Alternativ:
+            // throw new InternalServerErrorResponse("Ein unerwarteter Fehler ist aufgetreten.");
+        });
+
         this.webServer.start(8080);
         this.startConsole();
     }
@@ -60,7 +84,6 @@ public class BackendCore {
     }
 
     private void startConsole() {
-        this.console = new JLineConsole(this.webServer);
         this.initializeConsole();
         this.console.start();
     }
