@@ -52,7 +52,7 @@ public class BackendCore {
         accountRequest.edit();
         accountRequest.delete();
         accountRequest.information();
-        GroupRequest groupRequest = new GroupRequest(this.webServer, this.console);
+        GroupRequest groupRequest = new GroupRequest(this.webServer, this.console, this.mongoConnector.getGroupModel());
         groupRequest.create();
         groupRequest.edit();
         groupRequest.delete();
